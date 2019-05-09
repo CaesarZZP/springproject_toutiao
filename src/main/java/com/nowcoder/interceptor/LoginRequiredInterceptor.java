@@ -20,7 +20,7 @@ public class LoginRequiredInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
-        if (hostHolder.getUser() == null) {
+        if (hostHolder.getUser() == null) { //如果登陆时没有用户在hostHolder，也即没有ticket，那么就重新登录
             httpServletResponse.sendRedirect("/reglogin?next=" + httpServletRequest.getRequestURI());
             return false;
         }

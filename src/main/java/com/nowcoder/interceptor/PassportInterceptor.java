@@ -32,6 +32,11 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Override
     public boolean preHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o) throws Exception {
+        /*
+        判断用户是谁
+        查看cookies中是否有ticket这个cookie>若有，验证其是否有效>有效，则获取ticket对应的用户，并保存起来
+        在configuration中的WendaWebConfiguration中将拦截器注入到整个链路上
+         */
         String ticket = null;
         if (httpServletRequest.getCookies() != null) {
             for (Cookie cookie : httpServletRequest.getCookies()) {
@@ -56,8 +61,8 @@ public class PassportInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, Object o, ModelAndView modelAndView) throws Exception {
-        if (modelAndView != null && hostHolder.getUser() != null) {
-            modelAndView.addObject("user", hostHolder.getUser());
+        if (modelAndView != null && hostHolder.getUser() != null) {//所有拦截器渲染前都会把这个用户添加到传给网页的model里
+            modelAndView.addObject("user", hostHolder.getUser());//这里就体现了threadLocal
         }
     }
 
